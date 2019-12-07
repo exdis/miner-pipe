@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+import path from 'path';
+import cli from 'clap';
+import { createMinePipeline } from '../lib/pipeline.js';
+
+var command = cli.create('mine', '<path-to-miner-or-ref>')
+    .option('-m, --miner <path>', 'Path to miner')
+    .action(async function(args, xargs) {
+        const pipeline = await createMinePipeline(args[0] || this.values.path);
+
+        cli.create('nested', '[path]')
+            .option('--path [path]', 'path') // FIXME: fetch param list from miner
+            .action(async function(args) {
+                console.log(await pipeline(Object.assign({
+                    path: args[0] || process.cwd()
+                }, this.values)));
+            })
+            .run(xargs)
+    });
+
+try {
+    command.run();
+} catch (e) {
+    // output user frendly message if cli error
+    if (e instanceof cli.Error) {
+        console.error(e.message || e);
+        process.exit(2);
+    }
+
+    // otherwise re-throw exception
+    throw e;
+}

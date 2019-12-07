@@ -1,0 +1,20 @@
+{
+  "name": "miner-pipe",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "acorn": "^7.1.0",
+    "acorn-walk": "^7.0.0",
+    "clap": "^1.2.3",
+    "css-tree": "^1.0.0-alpha.38",
+    "npm": "^6.13.2"
+  }
+}
