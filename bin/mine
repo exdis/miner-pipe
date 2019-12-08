@@ -16,10 +16,9 @@ var command = cli.create('mine')
 
         const pipeline = await createMinePipeline({
             provider: this.values.provider,
-            miner: this.values.miner,
-            params
+            miner: this.values.miner
         });
-        console.log(await pipeline());
+        console.log(await pipeline(params));
     });
 
 try {
