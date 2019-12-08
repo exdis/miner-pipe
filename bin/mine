@@ -3,19 +3,23 @@ import path from 'path';
 import cli from 'clap';
 import { createMinePipeline } from '../lib/pipeline.js';
 
-var command = cli.create('mine', '<path-to-miner-or-ref>')
+var command = cli.create('mine')
+    .option('-p, --provider <provider>', 'Provider')
+    .option('--params <params>', 'Params')
     .option('-m, --miner <path>', 'Path to miner')
-    .action(async function(args, xargs) {
-        const pipeline = await createMinePipeline(args[0] || this.values.path);
+    .action(async function(args) {
+        let params;
 
-        cli.create('nested', '[path]')
-            .option('--path [path]', 'path') // FIXME: fetch param list from miner
-            .action(async function(args) {
-                console.log(await pipeline(Object.assign({
-                    path: args[0] || process.cwd()
-                }, this.values)));
-            })
-            .run(xargs)
+        try {
+            params = JSON.parse(this.values.params);
+        } catch (_) {}
+
+        const pipeline = await createMinePipeline({
+            provider: this.values.provider,
+            miner: this.values.miner,
+            params
+        });
+        console.log(await pipeline());
     });
 
 try {
